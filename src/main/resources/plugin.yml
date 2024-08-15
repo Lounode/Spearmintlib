@@ -1,0 +1,3 @@
+name: Spearmintlib
+version: '${version}'
+main: github.lounode.spearmintlib.bukkit.Spearmintlib

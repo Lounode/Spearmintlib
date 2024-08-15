@@ -1,0 +1,37 @@
+name: Build Bukkit Plugin
+
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        java: [8] # 确保与 Minecraft 1.12.2 兼容
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt' # 选择合适的 Java 发行版，例如 AdoptOpenJDK
+
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x ./gradlew
+
+      - name: print version
+        id: build
+        run: ./gradlew printVersion
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Capture Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpearmintlibBukkit-${{ env.VERSION }}
+          path: build/libs/*.jar # 假设生成的 JAR 文件位于 build/libs 目录下
