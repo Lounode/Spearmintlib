@@ -1,3 +1,11 @@
 name: Spearmintlib
 version: '${version}'
 main: github.lounode.spearmintlib.bukkit.Spearmintlib
+commands:
+  spearmintlib:
+    aliases:
+      - slib
+    permission: slib.admin
+permissions:
+  slib.admin:
+    default: op

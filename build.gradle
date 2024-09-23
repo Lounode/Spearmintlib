@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'github.lounode'
@@ -15,6 +16,7 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     //Citizens
     maven { url 'https://maven.enginehub.org/repo/' }
     maven { url 'https://repo.dmulloy2.net/repository/public/' }
@@ -25,9 +27,30 @@ repositories {
     }
 }
 
+
 dependencies {
+    //NMS
     compileOnly "org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT"
+    compileOnly fileTree("libs")
+    //libs
+    implementation "com.demonwav.mcdev:annotations:2.1.0"
+    compileOnly 'org.jetbrains:annotations:24.0.1'
+
+    //Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    //Manifold
+    implementation "systems.manifold:manifold-ext:2024.1.30"
+    annotationProcessor 'systems.manifold:manifold-ext:2024.1.30'
+    annotationProcessor 'systems.manifold:manifold-json:2024.1.30'
+    //MC plugins
     compileOnly "net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"
+
+}
+
+shadowJar {
+    archiveClassifier.set('all')
+    mergeServiceFiles()
 }
 
 def targetJavaVersion = 8
@@ -44,6 +67,20 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release = targetJavaVersion
     }
+    options.compilerArgs += ['-Xplugin:Manifold']
+}
+
+task buildDebugJar(type: Copy) {
+    dependsOn shadowJar
+    from shadowJar.archiveFile.get().asFile.path
+    into("$rootDir"+'/run/plugins').rename { "${project.name}-${version}-debug.jar" }
+
+}
+task buildReleseJar(type: Copy) {
+    dependsOn shadowJar
+    from shadowJar.archiveFile.get().asFile.path
+    into("$rootDir"+'/build').rename { "${project.name}-${version}.jar" }
+
 }
 
 processResources {

@@ -171,10 +171,11 @@ public class ItemStackCounter implements Iterable<ItemPair>, Cloneable, Configur
      * @return int
      * @author Lounode
      * @date 2024/05/18
-     */
+
     public int sizeItemStack() {
         return toList().size();
     }
+     */
     public void clear() {
         items.clear();
     }
@@ -189,7 +190,7 @@ public class ItemStackCounter implements Iterable<ItemPair>, Cloneable, Configur
      * @return {@link List }<{@link ItemStack }>
      * @author Lounode
      * @date 2024/05/18
-     */
+
     public List<ItemStack> toList() {
         List<ItemStack> result = new ArrayList<>();
         for (ItemPair pair : items) {
@@ -206,7 +207,7 @@ public class ItemStackCounter implements Iterable<ItemPair>, Cloneable, Configur
         }
         return result;
     }
-
+     */
     /**
      * comments:<br>
      * 将其转换为一个物品组数组，大于64的物品自动生成多个物品组
@@ -214,11 +215,11 @@ public class ItemStackCounter implements Iterable<ItemPair>, Cloneable, Configur
      * @return {@link ItemStack[] }
      * @author Lounode
      * @date 2024/05/18
-     */
+
     public ItemStack[] toArray() {
         return toList().toArray(new ItemStack[0]);
     }
-
+     */
     @Override
     public Iterator<ItemPair> iterator() {
         return items.iterator();
